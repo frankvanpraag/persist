@@ -1,0 +1,37 @@
+var imThemeCallback = {
+	// Called after a page is rendered (similiar to jquery's ready function callback)
+	renderedPage: function(pageId, promptIds) {
+
+		// Moving HTML elements
+		$( "#footer" ).insertAfter( $( ".bodyContainer" ) );
+		$( "#customHeader" ).insertBefore( $( ".bodyContainer" ) );
+		$( "#nav" ).insertAfter( $( ".bodyContainer" ) );
+                // Moving custom footer below #footer
+		$( "#customFooter" ).insertAfter( $( "#footer" ) );
+		// Auto Advance to next page upon clicking answer choice
+		for(x in promptIds) {
+			imThemeCallback.initializeAutoAdvance(promptIds[x]);
+		}
+	},
+
+	// Auto Advance to next page upon clicking answer choice
+	initializeAutoAdvance: function(elm) {
+		if($('#prompt_'+elm).hasClass("prompt_identifier_autoAdvance")||$('#prompt_'+elm).hasClass("prompt_identifier_languageButton")) {
+			autoAdvance.init(elm);
+		} else {
+			setTimeout(function(){ imThemeCallback.initializeAutoAdvance(elm); }, 10);
+		}
+	},
+};
+
+// Auto Advance to next page upon clicking answer choice
+var autoAdvance = {
+	init: function(elm){
+		var elms = document.getElementById('prompt_'+elm).getElementsByTagName('input');
+		for (a=0; a < elms.length; a++){
+			$(elms[a]).click(function (){
+				$('#nextPageLink').mousedown();
+			});
+		}
+	},
+};
